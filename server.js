@@ -1,6 +1,6 @@
 const http=require('node:http'),https=require('node:https'),{URL}=require('node:url'),path=require('node:path'),fs=require('node:fs');
 const PORT=Number(process.env.PORT||3000),BASE='https://api.datamartgh.shop',KEY=process.env.DATAMART_API_KEY,SECRET=process.env.DATAMART_API_SECRET;
-function send(res,s,o){const d=JSON.stringify(o);res.writeHead(s,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','Content-Length':Buffer.byteLength(d)});res.end(d)}
+function send(res,s,o){const d=JSON.stringify(o);res.writeHead(s,{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff','X-Frame-Options':'DENY','Referrer-Policy':'strict-origin-when-cross-origin','Content-Length':Buffer.byteLength(d)});res.end(d)}
 function request(p){return new Promise((resolve,reject)=>{const h={'Accept':'application/json','X-API-Key':KEY||''};if(SECRET)h['X-API-Secret']=SECRET;const r=https.request(new URL(p,BASE),{headers:h,timeout:12000},x=>{let d='';x.setEncoding('utf8');x.on('data',c=>d+=c);x.on('end',()=>{try{resolve({status:x.statusCode,body:JSON.parse(d)})}catch{resolve({status:x.statusCode,body:{}})}})});r.on('timeout',()=>r.destroy(new Error('timeout')));r.on('error',reject);r.end()})}
 http.createServer(async(req,res)=>{const u=new URL(req.url,'http://localhost');
 if(req.method==='GET'&&u.pathname==='/health')return send(res,200,{ok:true,service:'ExamBuddy Ghana'});
