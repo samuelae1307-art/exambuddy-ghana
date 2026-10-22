@@ -1,0 +1,7 @@
+{
+  "name": "exambuddy-ghana",
+  "version": "0.2.1",
+  "private": true,
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}
